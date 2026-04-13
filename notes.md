@@ -4,7 +4,8 @@ As part of Wave 0, please fill out notes for each of the below files. They are i
 PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 
 ## App.java
-
+ - Appears to be the "MAIN" file of the project.
+ - Connects the classes together by being responsible of object creation and calling the required methods to perform the desired task by the user.
 ## ConsoleColor.java
 
 ## ColorPrinter.java / ColorPrinterTest.java
