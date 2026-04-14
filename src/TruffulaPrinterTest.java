@@ -149,4 +149,41 @@ public class TruffulaPrinterTest {
         // Assert that the output matches the expected output exactly
         assertEquals(expected.toString(), output);
     }
+
+    @Test
+    public void testSimplePrintTree(@TempDir File tempDir) throws IOException {
+        File myFolder = new File(tempDir, "myFolder");
+        assertTrue(myFolder.mkdir(), "myFolder should be created");
+
+        File apple = new File(myFolder, "Apple.txt");
+        File banana = new File(myFolder, "banana.txt");
+        File zebra = new File(myFolder, "zebra.txt");
+        apple.createNewFile();
+        banana.createNewFile();
+        zebra.createNewFile();
+
+        TruffulaOptions options = new TruffulaOptions(myFolder, false, true);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(baos);
+
+        TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+
+        printer.printTree();
+
+        String output = baos.toString();
+        String nl = System.lineSeparator();
+
+        ConsoleColor reset = ConsoleColor.RESET;
+        ConsoleColor white = ConsoleColor.WHITE;
+        
+        StringBuilder expected = new StringBuilder();
+
+        expected.append(white).append("myFolder/").append(nl);
+        expected.append(reset).append("   Apple.txt").append(nl);
+        expected.append(reset).append("   banana.txt").append(nl);
+        expected.append(reset).append("   zebra.txt").append(nl);
+
+        assertEquals(expected.toString(), output);
+    }
 }
