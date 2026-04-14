@@ -7,11 +7,17 @@ PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
  - Appears to be the "MAIN" file of the project.
  - Connects the classes together by being responsible of object creation and calling the required methods to perform the desired task by the user.
 ## ConsoleColor.java
-
+ - Establishes an enum class to represent an ANSI code for the console.
+ - Each enum represents a code assigned to it made in the class intended to be used when the console prints in color.
+ - Method of doing so is appending the needed code prior to the text then the reset after the text.
 ## ColorPrinter.java / ColorPrinterTest.java
-
+ - This class represents an object that gets sets the color of the text.
+ - It is also responsible for printing when the method is called, the method automatically resets.
+ - Test checks for a message in red.
 ## TruffulaOptions.java / TruffulaOptionsTest.java
-
+ - This class is the configuration object for the program, given the desired options the class will alter boolean values within itself and represent the configuration.
+ - When the command is run this will act as what reads the user options that are passed and changed accordingly.
+ - Tests create a directory and test a configuration of the program.
 ## TruffulaPrinter.java / TruffulaPrinterTest.java
 
 ## AlphabeticalFileSorter.java
