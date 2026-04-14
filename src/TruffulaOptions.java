@@ -110,25 +110,20 @@ public class TruffulaOptions  {
     root = new File(args[args.length-1]);
     boolean colorUse = true;
     boolean showHiddenFiles = false;
-    try {
-      if(args.length > 1){
-        for(int i = 0; i < args.length-1; i++){
-          if(args[i].equals("-nc")){
-            colorUse = !colorUse;
-          }else if(args[i].equals("-h")){
-            showHiddenFiles = !showHiddenFiles;
-          }else{
-            throw new IllegalArgumentException();
-          }
+    if(args.length > 1){
+      for(int i = 0; i < args.length-1; i++){
+        if(args[i].equals("-nc")){
+          colorUse = !colorUse;
+        }else if(args[i].equals("-h")){
+          showHiddenFiles = !showHiddenFiles;
+        }else{
+          throw new IllegalArgumentException("Please input valid arguments");
         }
-        
-      }else{
-        throw new FileNotFoundException();
       }
-    } catch (FileNotFoundException e) {
-      System.err.print("Given file does not exist" + e);
-    } catch (IllegalArgumentException e){
-      System.err.print("Invalid argument given" + e);
+    }else{
+      if(!root.exists() || !root.isDirectory()){
+        throw new FileNotFoundException("Given file does not exist" + args.length);
+      }
     }
     useColor = colorUse;
     showHidden = showHiddenFiles;
