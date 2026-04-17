@@ -252,6 +252,53 @@ public class TruffulaPrinterTest {
 
         expected.append(white).append("myFolder/").append(nl);
         expected.append(white).append("   theLoneChud.txt").append(nl);
+        
+
+        assertEquals(expected.toString(), output);
+    }
+    @Test
+    public void testCycle(@TempDir File tempDir) throws IOException {
+        File myFolder = new File(tempDir, "White");
+        File myFolder2 = new File(myFolder, "Purple");
+        File myFolder3 = new File(myFolder2, "Yellow");
+        File myFolder4 = new File(myFolder3, "White");
+        File myFolder5 = new File(myFolder4, "Purple");
+        File myFolder6 = new File(myFolder5, "Yellow");
+        assertTrue(myFolder.mkdir(), "myFolder should be created");
+        assertTrue(myFolder2.mkdir(), "myFolder should be created");
+        assertTrue(myFolder3.mkdir(), "myFolder should be created");
+        assertTrue(myFolder4.mkdir(), "myFolder should be created");
+        assertTrue(myFolder5.mkdir(), "myFolder should be created");
+        assertTrue(myFolder6.mkdir(), "myFolder should be created");
+
+
+        
+
+        TruffulaOptions options = new TruffulaOptions(myFolder, false, true);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(baos);
+
+        TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+
+        printer.printTree();
+
+        String output = baos.toString();
+        String nl = System.lineSeparator();
+
+        ConsoleColor reset = ConsoleColor.RESET;
+        ConsoleColor white = ConsoleColor.WHITE;
+        ConsoleColor purple = ConsoleColor.PURPLE;
+        ConsoleColor yellow = ConsoleColor.YELLOW;
+        
+        StringBuilder expected = new StringBuilder();
+
+        expected.append(white).append("White/").append(nl).append(reset);
+        expected.append(purple).append("   Purple/").append(nl).append(reset);
+        expected.append(yellow).append("      Yellow/").append(nl).append(reset);
+        expected.append(white).append("         White/").append(nl).append(reset);
+        expected.append(purple).append("            Purple/").append(nl).append(reset);
+        expected.append(yellow).append("               Yellow/").append(nl).append(reset);
 
         assertEquals(expected.toString(), output);
     }
