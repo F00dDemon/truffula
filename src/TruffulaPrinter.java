@@ -123,6 +123,7 @@ public class TruffulaPrinter {
     for(File file : sort.sort(root.listFiles())){
       if(file.isHidden() && options.isShowHidden() == false) continue;
       if(color+1 > 2) color = -1;
+      if(options.isUseColor() == false) color = -1;
       setColor = DEFAULT_COLOR_SEQUENCE.get(color+1);
       if(file.isFile()){
         out.println(setColor+space+"   "+file.getName());
