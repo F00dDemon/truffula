@@ -112,13 +112,15 @@ public class TruffulaPrinter {
     // - For Wave 6: Use AlphabeticalFileSorter
     // DO NOT USE SYSTEM.OUT.PRINTLN
     // USE out.println instead (will use your ColorPrinter)
+    AlphabeticalFileSorter sort = new AlphabeticalFileSorter();
 
-    printTreeHelper(options.getRoot(), "", 0);
+
+    printTreeHelper(options.getRoot(), "", 0, sort);
   }
-  public void printTreeHelper(File root, String space, int color){
+  public void printTreeHelper(File root, String space, int color, AlphabeticalFileSorter sort){
     ConsoleColor setColor = DEFAULT_COLOR_SEQUENCE.get(color);
     out.println(setColor+space+root.getName()+"/");
-    for(File file : root.listFiles()){
+    for(File file : sort.sort(root.listFiles())){
       if(file.isHidden() && options.isShowHidden() == false) continue;
       if(color+1 > 2) color = -1;
       setColor = DEFAULT_COLOR_SEQUENCE.get(color+1);
@@ -126,7 +128,7 @@ public class TruffulaPrinter {
         out.println(setColor+space+"   "+file.getName());
       }
       if(file.isDirectory()){
-        printTreeHelper(file, (space+"   "), color+1);
+        printTreeHelper(file, (space+"   "), color+1, sort);
       }
     }
     
