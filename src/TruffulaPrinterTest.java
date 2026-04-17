@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertLinesMatch;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TruffulaPrinterTest {
@@ -183,6 +184,74 @@ public class TruffulaPrinterTest {
         expected.append(reset).append("   Apple.txt").append(nl);
         expected.append(reset).append("   banana.txt").append(nl);
         expected.append(reset).append("   zebra.txt").append(nl);
+
+        assertEquals(expected.toString(), output);
+    }
+
+    @Test
+    public void testHidden(@TempDir File tempDir) throws IOException {
+        File myFolder = new File(tempDir, "myFolder");
+        assertTrue(myFolder.mkdir(), "myFolder should be created");
+
+
+        createHiddenFile(myFolder, ".hidden.txt");
+        createHiddenFile(myFolder, ".ridden.txt");
+        createHiddenFile(myFolder, ".yidden.txt");
+
+        TruffulaOptions options = new TruffulaOptions(myFolder, true, false);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(baos);
+
+        TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+
+        printer.printTree();
+
+        String output = baos.toString();
+        String nl = System.lineSeparator();
+
+        ConsoleColor reset = ConsoleColor.RESET;
+        ConsoleColor white = ConsoleColor.WHITE;
+        
+        StringBuilder expected = new StringBuilder();
+
+        expected.append(white).append("myFolder/").append(nl);
+        expected.append(white).append("   .hidden.txt").append(nl);
+        expected.append(white).append("   .ridden.txt").append(nl);
+        expected.append(white).append("   .yidden.txt").append(nl);
+
+        assertEquals(expected.toString(), output);
+    }
+    @Test
+    public void testHiddenFalse(@TempDir File tempDir) throws IOException {
+        File myFolder = new File(tempDir, "myFolder");
+        assertTrue(myFolder.mkdir(), "myFolder should be created");
+
+        File unlovableChud = new File(myFolder, "theLoneChud.txt");
+        unlovableChud.createNewFile();
+        createHiddenFile(myFolder, ".hidden.txt");
+        createHiddenFile(myFolder, ".ridden.txt");
+        createHiddenFile(myFolder, ".yidden.txt");
+
+        TruffulaOptions options = new TruffulaOptions(myFolder, false, false);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(baos);
+
+        TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+
+        printer.printTree();
+
+        String output = baos.toString();
+        String nl = System.lineSeparator();
+
+        ConsoleColor reset = ConsoleColor.RESET;
+        ConsoleColor white = ConsoleColor.WHITE;
+        
+        StringBuilder expected = new StringBuilder();
+
+        expected.append(white).append("myFolder/").append(nl);
+        expected.append(white).append("   theLoneChud.txt").append(nl);
 
         assertEquals(expected.toString(), output);
     }
