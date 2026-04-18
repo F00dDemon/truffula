@@ -302,4 +302,48 @@ public class TruffulaPrinterTest {
 
         assertEquals(expected.toString(), output);
     }
+    @Test
+    public void testSortedCorrect(@TempDir File tempDir) throws IOException {
+        File myFolder = new File(tempDir, "B");
+        File myFolder2 = new File(myFolder, "A");
+        File myFolder3 = new File(myFolder, "E");
+        File myFolder4 = new File(myFolder, "C");
+        File myFolder5 = new File(myFolder, "F");
+        File myFolder6 = new File(myFolder, "D");
+        assertTrue(myFolder.mkdir(), "myFolder should be created");
+        assertTrue(myFolder2.mkdir(), "myFolder should be created");
+        assertTrue(myFolder3.mkdir(), "myFolder should be created");
+        assertTrue(myFolder4.mkdir(), "myFolder should be created");
+        assertTrue(myFolder5.mkdir(), "myFolder should be created");
+        assertTrue(myFolder6.mkdir(), "myFolder should be created");
+
+
+        
+
+        TruffulaOptions options = new TruffulaOptions(myFolder, false, false);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(baos);
+
+        TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+
+        printer.printTree();
+
+        String output = baos.toString();
+        String nl = System.lineSeparator();
+
+        ConsoleColor reset = ConsoleColor.RESET;
+        ConsoleColor white = ConsoleColor.WHITE;
+        
+        StringBuilder expected = new StringBuilder();
+
+        expected.append(white).append("B/").append(nl).append(reset);
+        expected.append(white).append("   A/").append(nl).append(reset);
+        expected.append(white).append("   C/").append(nl).append(reset);
+        expected.append(white).append("   D/").append(nl).append(reset);
+        expected.append(white).append("   E/").append(nl).append(reset);
+        expected.append(white).append("   F/").append(nl).append(reset);
+
+        assertEquals(expected.toString(), output);
+    }
 }
